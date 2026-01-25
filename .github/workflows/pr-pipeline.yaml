@@ -1,0 +1,81 @@
+﻿name: Build & Test 'PanKunik.Results.Rop'
+
+on:
+  pull_request:
+    branches:
+      - master
+
+env:
+  SOLUTION: PanKunik.Results.Rop.sln
+  CONFIGURATION: Release
+
+concurrency:
+  group: publish-nuget
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Configure NuGet to use GitHub Packages
+        run: |
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --name "github" \
+            --username "${{ github.repository_owner }}" \
+            --password "${{ secrets.GH_PAT_WRITE_PACKAGES }}" \
+            --store-password-in-clear-text
+
+      - name: Cache NuGet
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: dotnet restore $SOLUTION
+
+      - name: Build
+        run: dotnet build $SOLUTION --configuration $CONFIGURATION --no-restore
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            **/bin/${{ env.CONFIGURATION }}
+            **/obj/${{ env.CONFIGURATION }}
+
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '10.0.x'
+    
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: .
+      
+      - name: Run tests
+        run: dotnet test $SOLUTION --configuration $CONFIGURATION --no-build --no-restore

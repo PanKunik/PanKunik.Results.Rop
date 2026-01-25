@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <PackageId>PanKunik.Results.Rop</PackageId>
+	  <Version>0.1.0</Version>
+	  <Authors>Patryk Kunicki</Authors>
+	  <Description>Functional extensions for Result Pattern (Railway Oriented Programming)</Description>
+	  <PackageProjectUrl>https://github.com/pankunik/PanKunik.Results.Rop</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/pankunik/PanKunik.Results.Rop</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <PackageTags>common;results;pattern;rop</PackageTags>
+	  <TargetFramework>net10.0</TargetFramework>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PanKunik.Results" Version="0.1.1" />
+  </ItemGroup>
+
+</Project>
+
