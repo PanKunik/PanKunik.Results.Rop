@@ -2,23 +2,25 @@ namespace PanKunik.Results.Rop;
 
 public static class ResultOfTExtensions
 {
-    extension<T>(Result<T> result)
+    extension<TIn>(Result<TIn> result)
+        where TIn : notnull
     {
-        public Result<T> Tap(Action<T> action)
+        public Result<TIn> Tap(Action<TIn> action)
         {
             if (result.IsSuccess)
-                action(result.Value!);
+                action(result.Value);
 
             return result;
         }
 
-        public Result<K> Bind<K>(Func<T, Result<K>> func)
+        public Result<TOut> Bind<TOut>(Func<TIn, Result<TOut>> func)
+            where TOut : notnull
         {
-            if (result.IsFailure) return Result<K>.Failure(result.Error!);
-            return func(result.Value!);
+            if (result.IsFailure) return Result<TOut>.Failure(result.Error!);
+            return func(result.Value);
         }
 
-        public Result<T> BindIf(bool condition, Func<T, Result<T>> func)
+        public Result<TIn> BindIf(bool condition, Func<TIn, Result<TIn>> func)
         {
             if (result.IsFailure)
                 return result;
@@ -26,14 +28,15 @@ public static class ResultOfTExtensions
             if (!condition)
                 return result;
 
-            return func(result.Value!);
+            return func(result.Value);
         }
 
-        public Result<K> Map<K>(Func<T, K> func)
+        public Result<TOut> Map<TOut>(Func<TIn, TOut> func)
+            where TOut : notnull
         {
             return result.IsSuccess
-                ? Result<K>.Success(func(result.Value!))
-                : Result<K>.Failure(result.Error!);
+                ? Result<TOut>.Success(func(result.Value))
+                : Result<TOut>.Failure(result.Error!);
         }
     }
 }

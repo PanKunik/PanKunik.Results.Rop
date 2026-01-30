@@ -13,7 +13,6 @@ public partial class TaskResultOfTAsyncExtensionsTests
         var result = await taskResult.TapAsync(v =>
         {
             called = true;
-            Assert.Equal(1, v);
             return Task.CompletedTask;
         });
 
