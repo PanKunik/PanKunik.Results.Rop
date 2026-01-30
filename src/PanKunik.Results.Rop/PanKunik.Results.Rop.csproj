@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <PackageId>PanKunik.Results.Rop</PackageId>
-	  <Version>0.1.0</Version>
+	  <Version>0.2.0</Version>
 	  <Authors>Patryk Kunicki</Authors>
 	  <Description>Functional extensions for Result Pattern (Railway Oriented Programming)</Description>
 	  <PackageProjectUrl>https://github.com/pankunik/PanKunik.Results.Rop</PackageProjectUrl>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PanKunik.Results" Version="0.1.1" />
+    <PackageReference Include="PanKunik.Results" Version="0.3.0" />
   </ItemGroup>
 
 </Project>
